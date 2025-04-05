@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information - Farmer App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Weather-specific styles */
+        .weather-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .weather-form {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .weather-form input {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .weather-form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .weather-data {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .weather-main {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .weather-detail {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            margin: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .error-message {
+            color: red;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .farming-tips {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+
+        /* Basic navigation styles */
+        nav {
+            background-color: #333;
+            padding: 10px 0;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        
+        nav ul li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        
+        nav ul li a:hover {
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/market">Market</a></li>
+            <li><a href="/weather">Weather</a></li>
+            <!-- Add here all your other navigation links -->
+            <!-- Example: <li><a href="/about">About</a></li> -->
+        </ul>
+    </nav>
+    
+    <div class="content">
+        <h1>Weather Information</h1>
+        <p>Check the current weather conditions for your farming area.</p>
+        
+        <div class="weather-container">
+            <div class="weather-form">
+                <form method="POST" action="{{ url_for('weather') }}">
+                    <input type="text" name="city" placeholder="Enter city or village name" required {% if city %}value="{{ city }}"{% endif %}>
+                    <button type="submit">Get Weather</button>
+                </form>
+            </div>
+            
+            {% if error_message %}
+                <div class="error-message">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+            
+            {% if weather_data %}
+                <div class="weather-data">
+                    <div class="weather-main">
+                        <h2>{{ weather_data.name }}, {{ weather_data.sys.country }}</h2>
+                        <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ weather_data.weather[0].icon }}@2x.png" alt="{{ weather_data.weather[0].description }}">
+                        <h3>{{ weather_data.weather[0].main }} - {{ weather_data.weather[0].description }}</h3>
+                        <h2>{{ weather_data.main.temp }}°C</h2>
+                    </div>
+                    
+                    <div class="weather-detail">
+                        <h4>Temperature</h4>
+                        <p>Current: {{ weather_data.main.temp }}°C</p>
+                        <p>Feels like: {{ weather_data.main.feels_like }}°C</p>
+                        <p>Min: {{ weather_data.main.temp_min }}°C</p>
+                        <p>Max: {{ weather_data.main.temp_max }}°C</p>
+                    </div>
+                    
+                    <div class="weather-detail">
+                        <h4>Humidity & Pressure</h4>
+                        <p>Humidity: {{ weather_data.main.humidity }}%</p>
+                        <p>Pressure: {{ weather_data.main.pressure }} hPa</p>
+                    </div>
+                    
+                    <div class="weather-detail">
+                        <h4>Wind</h4>
+                        <p>Speed: {{ weather_data.wind.speed }} m/s</p>
+                        <p>Direction: {{ weather_data.wind.deg }}°</p>
+                    </div>
+                    
+                    <div class="weather-detail">
+                        <h4>Sunrise & Sunset</h4>
+                        <p>Sunrise: {{ weather_data.sys.sunrise|timestamp_to_time }}</p>
+                        <p>Sunset: {{ weather_data.sys.sunset|timestamp_to_time }}</p>
+                    </div>
+                    
+                    <div class="farming-tips">
+                        <h4>Farming Tips Based on Current Weather:</h4>
+                        {% if weather_data.main.temp < 10 %}
+                            <p>Cold conditions. Protect sensitive crops from frost. Consider delaying planting for cold-sensitive crops.</p>
+                        {% elif weather_data.main.temp > 30 %}
+                            <p>Hot conditions. Ensure adequate irrigation and consider providing shade for sensitive crops.</p>
+                        {% else %}
+                            <p>Moderate temperature. Good conditions for most farming activities.</p>
+                        {% endif %}
+                        
+                        {% if weather_data.main.humidity > 80 %}
+                            <p>High humidity. Monitor for fungal diseases. Avoid overhead irrigation.</p>
+                        {% elif weather_data.main.humidity < 30 %}
+                            <p>Low humidity. Ensure adequate irrigation. Watch for water stress in plants.</p>
+                        {% endif %}
+                        
+                        {% if weather_data.wind.speed > 10 %}
+                            <p>Strong winds. Avoid spraying pesticides. Ensure proper support for tall crops.</p>
+                        {% endif %}
+                        
+                        {% if 'rain' in weather_data.weather[0].description.lower() %}
+                            <p>Rainy conditions. Hold off on fertilizer application. Good time for planting in dry areas.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="weather-info">
+                    <p>Enter your location to get current weather data and farming tips.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Farmer App. All rights reserved.</p>
+    </footer>
+</body>
+</html>
