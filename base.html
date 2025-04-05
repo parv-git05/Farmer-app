@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kisan Direct Market{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='F_styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="main-container">
+        <header>
+            <div class="logo">
+                <a href="/"><h1>Kisan Direct</h1></a>
+            </div>
+            {% if session.user_id %}
+            <div class="mobile-menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            {% endif %}
+        </header>
+        
+        {% if session.user_id %}
+        <nav class="mobile-nav" id="mobileNav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('markets') }}"><i class="fas fa-store"></i> Markets</a></li>
+                <li><a href="{{ url_for('dealers') }}"><i class="fas fa-handshake"></i> Dealers</a></li>
+                <li><a href="{{ url_for('crops') }}"><i class="fas fa-seedling"></i> Crops</a></li>
+                <li><a href="{{ url_for('policies') }}"><i class="fas fa-file-contract"></i> Policies</a></li>
+                <li><a href="{{ url_for('suggestions') }}"><i class="fas fa-lightbulb"></i> Suggestions</a></li>
+                <li><a href="{{ url_for('weather') }}"><i class="fas fa-cloud-sun"></i> Weather</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+        
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Kisan Direct Market | All Rights Reserved</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Harvesting Suggestions - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h2>Profitable Harvesting Suggestions</h2>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="search-box">
+            <input type="text" id="suggestionSearch" placeholder="Search suggestions...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+    
+    <div class="suggestions-grid">
+        {% if suggestions %}
+            {% for suggestion in suggestions %}
+            <div class="suggestion-card">
+                <div class="suggestion-header">
+                    <h3>{{ suggestion.title }}</h3>
+                </div>
+                <div class="suggestion-content">
+                    <p>{{ suggestion.description | truncate(150) }}</p>
+                </div>
+                <div class="suggestion-meta">
+                    <span><i class="fas fa-chart-line"></i> Expected Profit: {{ suggestion.expected_profit }}</span>
+                    <span><i class="fas fa-store"></i> Market Demand: {{ suggestion.market_demand }}</span>
+                </div>
+                <a href="{{ url_for('suggestion_detail', suggestion_id=suggestion.id) }}" class="suggestion-link">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-message">
+                <p>No harvesting suggestions available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('suggestionSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const suggestionCards = document.querySelectorAll('.suggestion-card');
+        
+        suggestionCards.forEach(card => {
+            const suggestionTitle = card.querySelector('h3').textContent.toLowerCase();
+            const suggestionContent = card.querySelector('.suggestion-content p').textContent.toLowerCase();
+            
+            if (suggestionTitle.includes(searchTerm) || suggestionContent.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

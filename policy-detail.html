@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ policy.title }} - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h2>{{ policy.title }}</h2>
+        <a href="{{ url_for('policies') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Policies</a>
+    </div>
+    
+    <div class="policy-detail-card">
+        <div class="policy-dates">
+            <span><i class="fas fa-calendar-alt"></i> Start Date: {{ policy.start_date.strftime('%d %b, %Y') if policy.start_date else 'N/A' }}</span>
+            <span><i class="fas fa-calendar-check"></i> End Date: {{ policy.end_date.strftime('%d %b, %Y') if policy.end_date else 'Ongoing' }}</span>
+        </div>
+        
+        <div class="policy-section">
+            <h3>Description</h3>
+            <p>{{ policy.description }}</p>
+        </div>
+        
+        <div class="policy-section">
+            <h3>Eligibility</h3>
+            <p>{{ policy.eligibility }}</p>
+        </div>
+        
+        <div class="policy-section">
+            <h3>Benefits</h3>
+            <p>{{ policy.benefits }}</p>
+        </div>
+        
+        <div class="policy-section">
+            <h3>Required Documents</h3>
+            <p>{{ policy.documents_required }}</p>
+        </div>
+        
+        <div class="policy-section">
+            <h3>Application Process</h3>
+            <p>{{ policy.application_process }}</p>
+        </div>
+        
+        <div class="application-cta">
+            <a href="#" class="btn primary-btn">Apply Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

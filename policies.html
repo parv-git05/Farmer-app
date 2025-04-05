@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Government Policies - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h2>Government Policies for Farmers</h2>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="search-box">
+            <input type="text" id="policySearch" placeholder="Search policies...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+    
+    <div class="policies-list">
+        {% if policies %}
+            {% for policy in policies %}
+            <div class="policy-card">
+                <div class="policy-icon">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="policy-content">
+                    <h3>{{ policy.title }}</h3>
+                    <p class="policy-description">{{ policy.description | truncate(150) }}</p>
+                    <div class="policy-meta">
+                        <span><i class="fas fa-calendar-alt"></i> Valid from: {{ policy.start_date.strftime('%d %b, %Y') if policy.start_date else 'N/A' }}</span>
+                        <span><i class="fas fa-calendar-check"></i> Valid till: {{ policy.end_date.strftime('%d %b, %Y') if policy.end_date else 'Ongoing' }}</span>
+                    </div>
+                    <a href="{{ url_for('policy_detail', policy_id=policy.id) }}" class="policy-link">
+                        Read More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-message">
+                <p>No policy information available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('policySearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const policyCards = document.querySelectorAll('.policy-card');
+        
+        policyCards.forEach(card => {
+            const policyTitle = card.querySelector('h3').textContent.toLowerCase();
+            const policyDescription = card.querySelector('.policy-description').textContent.toLowerCase();
+            
+            if (policyTitle.includes(searchTerm) || policyDescription.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

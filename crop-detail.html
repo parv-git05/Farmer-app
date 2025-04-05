@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ crop.name }} - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h2>{{ crop.name }}</h2>
+        <a href="{{ url_for('crops') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Crops</a>
+    </div>
+    
+    <div class="detail-card">
+        <div class="detail-info">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-calendar-alt"></i> Season:</span>
+                <span class="info-value">{{ crop.season }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-clock"></i> Duration:</span>
+                <span class="info-value">{{ crop.duration }} days to harvest</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-tint"></i> Water Requirements:</span>
+                <span class="info-value">{{ crop.water_requirements }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-mountain"></i> Soil Type:</span>
+                <span class="info-value">{{ crop.soil_type }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-balance-scale"></i> Expected Yield:</span>
+                <span class="info-value">{{ crop.expected_yield }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-header">
+        <h3>Recommended Fertilizers</h3>
+    </div>
+    
+    {% if fertilizers %}
+    <div class="products-grid">
+        {% for fertilizer in fertilizers %}
+        <div class="product-card">
+            <div class="product-icon">
+                <i class="fas fa-flask"></i>
+            </div>
+            <div class="product-details">
+                <h4>{{ fertilizer.name }}</h4>
+                <p class="product-info">{{ fertilizer.description }}</p>
+                <p class="product-usage">Application: {{ fertilizer.application }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-message">
+        <p>No fertilizer information available for this crop.</p>
+    </div>
+    {% endif %}
+    
+    <div class="section-header">
+        <h3>Recommended Pesticides</h3>
+    </div>
+    
+    {% if pesticides %}
+    <div class="products-grid">
+        {% for pesticide in pesticides %}
+        <div class="product-card">
+            <div class="product-icon">
+                <i class="fas fa-bug"></i>
+            </div>
+            <div class="product-details">
+                <h4>{{ pesticide.name }}</h4>
+                <p class="product-info">{{ pesticide.description }}</p>
+                <p class="product-usage">Target Pests: {{ pesticide.target_pests }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-message">
+        <p>No pesticide information available for this crop.</p>
+    </div>
+    {% endif %}
+    
+    <div class="section-header">
+        <h3>Harvesting Suggestions</h3>
+    </div>
+    
+    {% if suggestions %}
+    <div class="suggestions-list">
+        {% for suggestion in suggestions %}
+        <div class="suggestion-card">
+            <h4>{{ suggestion.title }}</h4>
+            <p>{{ suggestion.description }}</p>
+            <div class="suggestion-meta">
+                <span><i class="fas fa-chart-line"></i> Expected Profit: {{ suggestion.expected_profit }}</span>
+                <span><i class="fas fa-store"></i> Market Demand: {{ suggestion.market_demand }}</span>
+            </div>
+            <a href="{{ url_for('suggestion_detail', suggestion_id=suggestion.id) }}" class="suggestion-link">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-message">
+        <p>No harvesting suggestions available for this crop.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

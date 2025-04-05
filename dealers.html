@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Dealers - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h2>Agricultural Dealers</h2>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="search-box">
+            <input type="text" id="dealerSearch" placeholder="Search dealers...">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="filter-options">
+            <a href="{{ url_for('dealers') }}" class="filter-option {% if not current_type %}active{% endif %}">All</a>
+            <a href="{{ url_for('dealers', type='seeds') }}" class="filter-option {% if current_type == 'seeds' %}active{% endif %}">Seeds</a>
+            <a href="{{ url_for('dealers', type='fertilizer') }}" class="filter-option {% if current_type == 'fertilizer' %}active{% endif %}">Fertilizers</a>
+            <a href="{{ url_for('dealers', type='equipment') }}" class="filter-option {% if current_type == 'equipment' %}active{% endif %}">Equipment</a>
+        </div>
+    </div>
+    
+    <div class="items-grid">
+        {% if dealers %}
+            {% for dealer in dealers %}
+            <div class="item-card">
+                <div class="item-icon">
+                    {% if dealer.dealer_type == 'seeds' %}
+                    <i class="fas fa-seedling"></i>
+                    {% elif dealer.dealer_type == 'fertilizer' %}
+                    <i class="fas fa-flask"></i>
+                    {% elif dealer.dealer_type == 'equipment' %}
+                    <i class="fas fa-tools"></i>
+                    {% else %}
+                    <i class="fas fa-handshake"></i>
+                    {% endif %}
+                </div>
+                <div class="item-details">
+                    <h3>{{ dealer.name }}</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> {{ dealer.location }}</p>
+                    <p><i class="fas fa-phone"></i> {{ dealer.contact }}</p>
+                    <p><i class="fas fa-tag"></i> {{ dealer.dealer_type }}</p>
+                </div>
+                <a href="{{ url_for('dealer_detail', dealer_id=dealer.id) }}" class="item-link">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-message">
+                <p>No dealers available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('dealerSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const dealerCards = document.querySelectorAll('.item-card');
+        
+        dealerCards.forEach(card => {
+            const dealerName = card.querySelector('h3').textContent.toLowerCase();
+            const dealerLocation = card.querySelector('p:nth-child(2)').textContent.toLowerCase();
+            const dealerType = card.querySelector('p:nth-child(4)').textContent.toLowerCase();
+            
+            if (dealerName.includes(searchTerm) || dealerLocation.includes(searchTerm) || dealerType.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

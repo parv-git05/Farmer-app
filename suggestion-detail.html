@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ suggestion.title }} - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h2>{{ suggestion.title }}</h2>
+        <a href="{{ url_for('suggestions') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Suggestions</a>
+    </div>
+    
+    <div class="detail-card">
+        <div class="crop-link">
+            <p>For crop: <a href="{{ url_for('crop_detail', crop_id=crop.id) }}">{{ crop.name }}</a></p>
+        </div>
+        
+        <div class="section-header">
+            <h3>Description</h3>
+        </div>
+        <div class="content-section">
+            <p>{{ suggestion.description }}</p>
+        </div>
+        
+        <div class="section-header">
+            <h3>Best Practices</h3>
+        </div>
+        <div class="content-section">
+            <p>{{ suggestion.best_practices }}</p>
+        </div>
+        
+        <div class="detail-meta">
+            <div class="meta-item">
+                <span class="meta-label"><i class="fas fa-chart-line"></i> Expected Profit:</span>
+                <span class="meta-value">{{ suggestion.expected_profit }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fas fa-store"></i> Market Demand:</span>
+                <span class="meta-value">{{ suggestion.market_demand }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

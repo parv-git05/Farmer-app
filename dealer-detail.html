@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dealer.name }} - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h2>{{ dealer.name }}</h2>
+        <a href="{{ url_for('dealers') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dealers</a>
+    </div>
+    
+    <div class="detail-card">
+        <div class="detail-info">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-map-marker-alt"></i> Location:</span>
+                <span class="info-value">{{ dealer.location }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-phone"></i> Contact:</span>
+                <span class="info-value">{{ dealer.contact }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-tag"></i> Dealer Type:</span>
+                <span class="info-value">{{ dealer.dealer_type }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-header">
+        <h3>Products Offered</h3>
+    </div>
+    
+    {% if products %}
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-icon">
+                {% if dealer.dealer_type == 'seeds' %}
+                <i class="fas fa-seedling"></i>
+                {% elif dealer.dealer_type == 'fertilizer' %}
+                <i class="fas fa-flask"></i>
+                {% elif dealer.dealer_type == 'equipment' %}
+                <i class="fas fa-tools"></i>
+                {% else %}
+                <i class="fas fa-box"></i>
+                {% endif %}
+            </div>
+            <div class="product-details">
+                <h4>{{ product.name }}</h4>
+                <p class="product-price">₹{{ product.price }}</p>
+                <p class="product-info">{{ product.description }}</p>
+                {% if product.availability %}
+                <p class="product-availability available">In Stock</p>
+                {% else %}
+                <p class="product-availability unavailable">Out of Stock</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-message">
+        <p>No product information available for this dealer.</p>
+    </div>
+    {% endif %}
+    
+    <div class="section-header">
+        <h3>Business Hours</h3>
+    </div>
+    <div class="operating-hours">
+        <div class="hours-item">
+            <span class="day">Monday - Saturday:</span>
+            <span class="time">9:00 AM - 7:00 PM</span>
+        </div>
+        <div class="hours-item">
+            <span class="day">Sunday:</span>
+            <span class="time">9:00 AM - 1:00 PM</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="welcome-banner">
+        <h2>Welcome, {{ user.name }}!</h2>
+        <p>Here's your farming dashboard with latest updates</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Nearby Markets</h3>
+                <a href="{{ url_for('markets') }}" class="view-all">View All</a>
+            </div>
+            <div class="card-content">
+                {% if markets %}
+                <ul class="item-list">
+                    {% for market in markets %}
+                    <li>
+                        <a href="{{ url_for('market_detail', market_id=market.id) }}">
+                            <span class="item-name">{{ market.name }}</span>
+                            <span class="item-location">{{ market.location }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="no-data">No markets available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Dealers</h3>
+                <a href="{{ url_for('dealers') }}" class="view-all">View All</a>
+            </div>
+            <div class="card-content">
+                {% if dealers %}
+                <ul class="item-list">
+                    {% for dealer in dealers %}
+                    <li>
+                        <a href="{{ url_for('dealer_detail', dealer_id=dealer.id) }}">
+                            <span class="item-name">{{ dealer.name }}</span>
+                            <span class="item-type">{{ dealer.dealer_type }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="no-data">No dealers available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Seasonal Crops</h3>
+                <a href="{{ url_for('crops') }}" class="view-all">View All</a>
+            </div>
+            <div class="card-content">
+                {% if crops %}
+                <ul class="item-list">
+                    {% for crop in crops %}
+                    <li>
+                        <a href="{{ url_for('crop_detail', crop_id=crop.id) }}">
+                            <span class="item-name">{{ crop.name }}</span>
+                            <span class="item-season">{{ crop.season }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="no-data">No crop information available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Government Policies</h3>
+                <a href="{{ url_for('policies') }}" class="view-all">View All</a>
+            </div>
+            <div class="card-content">
+                {% if policies %}
+                <ul class="item-list">
+                    {% for policy in policies %}
+                    <li>
+                        <a href="{{ url_for('policy_detail', policy_id=policy.id) }}">
+                            <span class="item-name">{{ policy.title }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="no-data">No policy information available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

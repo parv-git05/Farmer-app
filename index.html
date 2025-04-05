@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="landing-page">
+    <div class="hero">
+        <h1>किसान डायरेक्ट मार्केट</h1>
+        <h2>Empowering Farmers with Direct Market Access</h2>
+        <p>Connect directly with wholesale markets, dealers, and access vital farming information</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('login') }}" class="btn primary-btn">Login</a>
+            <a href="{{ url_for('register') }}" class="btn secondary-btn">Register</a>
+        </div>
+    </div>
+    
+    <div class="features">
+        <div class="feature-card">
+            <i class="fas fa-store"></i>
+            <h3>Wholesale Market</h3>
+            <p>Connect directly with wholesale markets to get the best prices for your produce</p>
+        </div>
+        
+        <div class="feature-card">
+            <i class="fas fa-handshake"></i>
+            <h3>Dealer Access</h3>
+            <p>Find reliable dealers for seeds, fertilizers, and equipment</p>
+        </div>
+        
+        <div class="feature-card">
+            <i class="fas fa-seedling"></i>
+            <h3>Cropping Information</h3>
+            <p>Access detailed information about crops, seasons, and best practices</p>
+        </div>
+        
+        <div class="feature-card">
+            <i class="fas fa-file-contract"></i>
+            <h3>Government Policies</h3>
+            <p>Stay updated with the latest government schemes and policies for farmers</p>
+        </div>
+        
+        <div class="feature-card">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Profitable Suggestions</h3>
+            <p>Get recommendations for profitable harvesting and market trends</p>
+        </div>
+        
+        <div class="feature-card">
+            <i class="fas fa-cloud-sun"></i>
+            <h3>Weather Updates</h3>
+            <p>Access local weather forecasts to plan your farming activities</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

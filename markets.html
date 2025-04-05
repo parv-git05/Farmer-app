@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Wholesale Markets - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h2>Wholesale Markets</h2>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="search-box">
+            <input type="text" id="marketSearch" placeholder="Search markets...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+    
+    <div class="items-grid">
+        {% if markets %}
+            {% for market in markets %}
+            <div class="item-card">
+                <div class="item-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="item-details">
+                    <h3>{{ market.name }}</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> {{ market.location }}</p>
+                    <p><i class="fas fa-phone"></i> {{ market.contact }}</p>
+                    <p><i class="fas fa-tag"></i> {{ market.market_type }}</p>
+                </div>
+                <a href="{{ url_for('market_detail', market_id=market.id) }}" class="item-link">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-message">
+                <p>No markets available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('marketSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const marketCards = document.querySelectorAll('.item-card');
+        
+        marketCards.forEach(card => {
+            const marketName = card.querySelector('h3').textContent.toLowerCase();
+            const marketLocation = card.querySelector('p:nth-child(2)').textContent.toLowerCase();
+            
+            if (marketName.includes(searchTerm) || marketLocation.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

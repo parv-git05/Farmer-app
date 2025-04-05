@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Crops Information - Kisan Direct Market{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h2>Crop Information</h2>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="search-box">
+            <input type="text" id="cropSearch" placeholder="Search crops...">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="filter-options">
+            <a href="{{ url_for('crops') }}" class="filter-option {% if not current_season %}active{% endif %}">All Seasons</a>
+            <a href="{{ url_for('crops', season='kharif') }}" class="filter-option {% if current_season == 'kharif' %}active{% endif %}">Kharif</a>
+            <a href="{{ url_for('crops', season='rabi') }}" class="filter-option {% if current_season == 'rabi' %}active{% endif %}">Rabi</a>
+            <a href="{{ url_for('crops', season='zaid') }}" class="filter-option {% if current_season == 'zaid' %}active{% endif %}">Zaid</a>
+            <a href="{{ url_for('crops', season='perennial') }}" class="filter-option {% if current_season == 'perennial' %}active{% endif %}">Perennial</a>
+        </div>
+    </div>
+    
+    <div class="items-grid">
+        {% if crops %}
+            {% for crop in crops %}
+            <div class="item-card">
+                <div class="item-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div class="item-details">
+                    <h3>{{ crop.name }}</h3>
+                    <p><i class="fas fa-calendar-alt"></i> {{ crop.season }}</p>
+                    <p><i class="fas fa-clock"></i> {{ crop.duration }} days</p>
+                    <p><i class="fas fa-tint"></i> {{ crop.water_requirements }}</p>
+                </div>
+                <a href="{{ url_for('crop_detail', crop_id=crop.id) }}" class="item-link">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-message">
+                <p>No crop information available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('cropSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const cropCards = document.querySelectorAll('.item-card');
+        
+        cropCards.forEach(card => {
+            const cropName = card.querySelector('h3').textContent.toLowerCase();
+            const cropSeason = card.querySelector('p:nth-child(2)').textContent.toLowerCase();
+            
+            if (cropName.includes(searchTerm) || cropSeason.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
